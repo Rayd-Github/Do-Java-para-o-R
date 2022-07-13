@@ -1,0 +1,137 @@
+# Percentual de Gordura
+
+#https://www.cdof.com.br/gordura.htm
+
+#https://www.cdof.com.br/bodycomp.js
+
+setwd("~/Dropbox/04 CURSOS & CONGRESSOS/JORNADA OMEGA/R PARA DECOLAR")
+
+# Indices
+# imc=peso/altura^2
+# densidade = Density.value
+# massa_magra = LeanWeight
+# massa_gorda = FatWeight
+# percentual_gordura = PercentFat
+# percentual_medio_popul. = PopulationAverage
+# desvio = StandDev
+# escore = Zscore
+
+# Informe os valores
+peso <- 50
+idade <- 20
+triceps<-3
+peitoral<-3
+subaxilar<-3
+subescapular<-3
+abdominal<-3
+suprailiaca<-3
+coxa<-3
+
+
+
+
+Teste <- function() {
+    
+    cat("Número de pregas cutâneas que vão ser medidas: 3 ou 7 ")
+    NS <- scan(n = 1, what = numeric())
+    
+    cat(" Qual o sexo do paciente: Mullher ou Homem")
+    S <-scan(n = 1, what = "character")
+    
+    
+    SumSeven = triceps*1 +
+        peitoral*1 +
+        subaxilar*1 +
+        subescapular*1 +
+        abdominal*1 +
+        suprailiaca*1 +
+        coxa*1 
+    
+    SumThreeMen = peitoral*1 + abdominal*1 + coxa*1 
+    SumThreeWomen = triceps*1 + suprailiaca*1 + coxa*1 
+    
+    if (S == "Homem" & NS == 7){
+        Densidade = 1.112-0.0004*SumSeven +
+            0.0000*(SumSeven ^2) - 
+            0.0002*idade
+    }
+    
+    if (S == "Mulher" & NS == 7){
+        Densidade = 1.097-0.0004*SumSeven + 
+            0.0000*(SumSeven^2) - 
+            0.0001*idade
+    }
+    
+    if (S == "Homem" & NS == 3){
+        Densidade = 1.10938-0.0008267*SumThreeMen + 
+            0.0000*(SumThreeMen^2) -
+            0.0002*idade
+    } 
+    
+    if (S =="Mulher" & NS == 3){
+        Densidade = 1.0994 - 0.0009*SumThreeWomen +
+            0.0000*(SumThreeWomen^2) -
+            0.0001*idade
+    }
+    
+    percentual_gordura = (4.95/Densidade - 4.5)*100
+    massa_gorda = peso*percentual_gordura/100
+    massa_magra = peso-massa_gorda
+    
+    if (S == "Homem") {
+        percentual_medio_popul = 13.815+0.13*idade
+    }
+    
+    if (S == "Mulher"){
+        percentual_medio_popul = 21.55+0.1*idade
+    }
+    
+    if (S == "Homem"){
+        desvio = 6
+    }
+    
+    if (S == "Mulher" & percentual_gordura<=percentual_medio_popul){
+        desvio = 8
+    }
+    
+    if (S == "Mulher" & percentual_gordura > percentual_medio_popul){
+        desvio = 7
+    }
+    
+    
+    Escore = (percentual_medio_popul - percentual_gordura)/ desvio
+    
+    
+    PercRegress = 0.49402+0.44379*abs(Escore) - 0.0826*abs(Escore^2) - 0.02123*abs(Escore^3) + 0.00608*abs(Escore^4)
+    
+    if (Escore >0 ){
+        Valor_escore = round(PercRegress*100)
+    }
+    
+    if (Escore <=0){
+        Valor_escore = round((1-PercRegress)*100)
+        
+    }
+    
+    if (Escore>=1){
+        print("Excelente")
+    }  
+    
+    if (Escore <1 & Escore >= 0.5){
+        print("Bom")
+    }
+    
+    if (Escore <0.5 & Escore >= - 0.5){
+        print("Médio")
+    }
+    
+    if (Escore < -0.5 & Escore >= -1){
+        print("Razoavel")
+    }
+    
+    if (Escore < -1){
+        print("Ruim")
+    }
+}
+
+Teste()
